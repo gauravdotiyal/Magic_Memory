@@ -27,6 +27,7 @@ function App() {
        setTurns(0)
    }
     
+    
   //handle a choice
   const handleChoice =(card)=>{
     choiceOne?setChoiceTwo(card):setChoiceOne(card) 
@@ -47,11 +48,12 @@ function App() {
        resetTurn()
     }
     else if(choiceOne!=null && choiceTwo!=null && choiceOne.src!==choiceTwo.src) { 
-        resetTurn()
+        setTimeout(()=>resetTurn(),500)
+        
     }
   },[choiceOne,choiceTwo])
  
-    console.log(cards)
+    // console.log(cards)
 
   //reset choices and increase turns 
   const resetTurn=()=>{
@@ -71,6 +73,7 @@ function App() {
                 key={card.id} 
                 card={card}
                 handleChoice={handleChoice}
+                flipped={card===choiceOne || card===choiceTwo || card.matched}
                 />
            ))}
          </div>
