@@ -15,14 +15,16 @@ function App() {
    const [turns,setTurns]=useState(0)
    const [choiceOne,setChoiceOne]=useState(null)
    const [choiceTwo,setChoiceTwo]=useState(null)
-
+   const [disabled,setDisabled]=useState(false)
 
    //shuffle cards 
    const shuffleCards=()=>{
        const shuffledCards=[...cardImages,...cardImages]
        .sort(()=>Math.random()-0.5)
        .map((card)=>({...card ,id:Math.random()}))
-
+       
+       setChoiceOne(null)
+       setChoiceTwo(null)
        setCards(shuffledCards)
        setTurns(0)
    }
@@ -34,23 +36,26 @@ function App() {
   }
   
    
-  useEffect(()=>{
-    if(choiceOne!=null && choiceTwo!=null && choiceOne.src===choiceTwo.src){
-       setCards(prevCards=>{
-        return prevCards.map(card=>{
-          if(card.src==choiceOne.src){
-             return {...card,matched: true}
-          }else{
-             return card
-          }
-        })
-       })
-       resetTurn()
+  useEffect(()=>{   
+    if(choiceOne!=null && choiceTwo!=null ){
+      setDisabled(true) 
+       if(choiceOne.src ===choiceTwo.src){
+        setCards(prevCards=>{
+          return prevCards.map(card=>{
+            if(card.src==choiceOne.src){
+               return {...card,matched: true}
+            }else{
+               return card
+            }
+          })
+         })
+         resetTurn()
+       }
+       else {
+        setTimeout(()=>resetTurn(),500) 
+       }
     }
-    else if(choiceOne!=null && choiceTwo!=null && choiceOne.src!==choiceTwo.src) { 
-        setTimeout(()=>resetTurn(),500)
-        
-    }
+    
   },[choiceOne,choiceTwo])
  
     // console.log(cards)
@@ -60,7 +65,13 @@ function App() {
     setChoiceOne(null)
     setChoiceTwo(null)
     setTurns(prevTurns=>prevTurns+1)
+    setDisabled(false)
   }
+
+  //start a new game automatically
+  useEffect(()=>{
+     shuffleCards()
+  },[])
 
   return (
      <div className='App'>
@@ -74,9 +85,11 @@ function App() {
                 card={card}
                 handleChoice={handleChoice}
                 flipped={card===choiceOne || card===choiceTwo || card.matched}
+                disabled={disabled}
                 />
            ))}
          </div>
+         <p>Turns taken : {turns}</p>
      </div>
   );
 }
