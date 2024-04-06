@@ -24,3 +24,7 @@
   font-size: 18px;
   text-transform: uppercase;
 }
+.modal button{
+    color: black;
+    /* background-color: aqua; */
+}

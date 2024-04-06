@@ -78,6 +78,7 @@ function App() {
   //Handling the Modal
   const handleClose=()=>{
      setShowModal(false)
+     setCount(0)
   }
    
   return (
@@ -97,7 +98,7 @@ function App() {
       </div>
       <p>Turns taken : {turns}</p> 
        
-      {count==6 && <Modal turns={turns} handleClose={handleClose}/>}
+      {count==6   && <Modal turns={turns} handleClose={handleClose}  />}
 
     </div>
   );
